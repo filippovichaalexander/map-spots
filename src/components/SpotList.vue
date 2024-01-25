@@ -28,7 +28,7 @@
             <q-item-label caption lines="3">Code: {{ spot.code }}</q-item-label>
             <div class="row q-items-center q-pa-sm">
               <div lines="4" v-if="spot.status" class="circle circle--green col-4"></div>
-              <div lines="4" v-else="!spot.status" class="circle circle--red col-8"></div>
+              <div lines="4" v-else class="circle circle--red col-8"></div>
             </div>
           </q-btn>
           <q-separator spaced inset color="primary"/>
