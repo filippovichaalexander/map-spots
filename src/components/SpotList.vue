@@ -1,51 +1,56 @@
 <script setup lang="ts" >
+  import { onBeforeMount } from 'vue'
   import { useDotsStore } from '../stores/dots-store';
+  import { Spot } from '../models/spots';
+  
   const dotsStore = useDotsStore();
 
-  import { defineEmits } from 'vue';
-  
-  interface Spot {
-    name: string;
-    location: [number, number];
-    description?: string;
-    code?: String;
-    status: boolean;
-  }
   const emits = defineEmits(['spotClicked']);
 
   const handleClick = (spot: Spot) => {
     emits('spotClicked', spot);
   };
+  
+  const heavyList: readonly Spot[] = dotsStore.getDots;
+
+  onBeforeMount(() => {
+    dotsStore.setDots();
+  });
 </script>
-
 <template>
-  <div class="q-gutter-md wrapper" >
-    <q-list>
-      <q-item class="item " v-for="spot in dotsStore.getDots" :key="spot.name" @click="handleClick(spot)">
+  <q-virtual-scroll
+      class="wrapper"
+      :items="heavyList"
+      separator
+      v-slot="{index, item}"
+    >
+      <q-item
+        :key="index"
+        dense
+      >
         <q-item-section>
-          <q-btn @click="handleClick(spot)" color="primary" flat >{{ spot.name }}
-            <q-item-label caption lines="2">{{ spot.description }}</q-item-label>
-            <q-item-label caption lines="3">Code: {{ spot.code }}</q-item-label>
-            <div class="row q-items-center q-pa-sm">
-              <div lines="4" v-if="spot.status" class="circle circle--green col-4"></div>
-              <div lines="4" v-else class="circle circle--red col-8"></div>
+          <q-btn @click="handleClick(item)" color="primary" flat >
+            <div class="row column">
+              <q-item-section >{{ item.name }}</q-item-section>
+              <q-item-section>
+                <q-item-label class="q-block" caption lines="2">{{ item.description }}</q-item-label>
+                <q-item-label class="q-block" caption lines="3">Code: {{ item.code }}</q-item-label>
+              </q-item-section>
+              <q-item-section class="row justify-center">
+                <div v-if="item.status" class="circle bg-green q-mx-auto q-mt-sm"></div>
+                <div v-else class="circle bg-red q-mx-auto q-mt-sm"></div>
+              </q-item-section> 
             </div>
-          </q-btn>
-          <q-separator spaced inset color="primary"/>
-        </q-item-section>
+            </q-btn>
+          </q-item-section>
       </q-item>
-    </q-list>
-  </div>
+    </q-virtual-scroll> 
 </template>
-
 <style scoped>
 .wrapper {
   max-width: 350px; 
   max-height: 95vh;
   overflow-y: scroll;
-}
-.item {
-  background-color: rgb(199, 199, 199);
 }
 .item:hover {
     cursor: pointer;
@@ -54,11 +59,5 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-  }
-  .circle--green {
-    background-color: green;
-  }
-  .circle--red {
-    background-color: red;
   }
 </style>
