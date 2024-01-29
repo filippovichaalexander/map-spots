@@ -5,8 +5,7 @@
   import 'leaflet/dist/leaflet.css';
 
   interface Props {
-    spots: Spot[];
-    selectedSpot: Spot | null;
+    spot: Spot | null;
   }
 
   const props = defineProps<Props>();
@@ -19,16 +18,10 @@
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
     }).addTo(map); 
-  
-    watch(() => props.spots, (newSpots) => {
-      newSpots.forEach((spot: Spot) => {
-        L.marker(spot.location).addTo(map).bindTooltip(spot.name);
-      });
-    });
 
-    watch(() => props.selectedSpot, (newSpot) => {
+    watch(() => props.spot, (newSpot) => {
       if (newSpot) {
-      const selectedSpot = newSpot as Spot;
+      const spot = newSpot as Spot;
 
       map.eachLayer((layer: any) => {
         if (layer instanceof L.Marker) {
@@ -36,9 +29,9 @@
         }
       });
 
-      map.setView(selectedSpot.location, 13); 
-      const marker = L.marker(selectedSpot.location).addTo(map);
-      marker.bindTooltip(selectedSpot.name).openTooltip(); 
+      map.setView(spot.location, 13); 
+      const marker = L.marker(spot.location).addTo(map);
+      marker.bindTooltip(spot.name).openTooltip(); 
     }
     });
   });

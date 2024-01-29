@@ -1,5 +1,5 @@
 <script setup lang="ts" >
-  import { onBeforeMount } from 'vue'
+  import { computed } from 'vue'
   import { useDotsStore } from '../stores/dots-store';
   import { Spot } from '../models/spots';
   
@@ -11,11 +11,7 @@
     emits('spotClicked', spot);
   };
   
-  const heavyList: readonly Spot[] = dotsStore.getDots;
-
-  onBeforeMount(() => {
-    dotsStore.setDots();
-  });
+  const heavyList = computed(() => dotsStore.getDots)
 </script>
 <template>
   <q-virtual-scroll

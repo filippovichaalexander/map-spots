@@ -13,16 +13,14 @@
   const handleSpotClicked = (spot: Spot) => {
     selectedSpot.value = spot;
   };
-  onBeforeMount( () => {
-    dotsStore.setDots()
-  })
+  onBeforeMount(() => dotsStore.setDots())
 </script>
 
 <template>
-  <q-layout >
+  <q-layout>
     <div class="q-gutter-md d-flex row flex-no-wrap">
-      <SpotList class="col-2" :spots="dotsStore.getDots" @spotClicked="handleSpotClicked"/>
-      <MapComponent class="col-10" :spots="[...dotsStore.getDots]" :selectedSpot="selectedSpot"/>
+      <SpotList class="col-2" @spotClicked="handleSpotClicked"/>
+      <MapComponent class="col-10" :spot="selectedSpot"/>
     </div>
   </q-layout>
 </template>

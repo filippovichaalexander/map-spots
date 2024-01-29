@@ -7,21 +7,23 @@ export interface Spot {
 }
 
 export function generateSpotObjects(): readonly Spot[] {
-  const spotObjects: Spot[] = [];
-    for (let i = 1; i <= 10000; i++) {
-      const spot: Spot = {
-        name: `Spot ${i}`,
-        location: [
-          getRandomCoordinate(51.505, 56),
-          getRandomCoordinate(-0.09, 5),
-        ],
-        description: `This is spot ${i}`,
-        code: i,
-        status: Math.random() < 0.5,
-      };
-      spotObjects.push(spot);
-    }
-    return spotObjects;
+  const spotObjects: Spot[] = Array(10000);
+
+  for (let i = 0; i < 10000; i++) {
+    const id = i + 1;
+    const spot: Spot = {
+      name: `Spot ${id}`,
+      location: [
+        getRandomCoordinate(51.505, 56),
+        getRandomCoordinate(-0.09, 5),
+      ],
+      description: `This is spot ${id}`,
+      code: id,
+      status: Math.random() < 0.5,
+    };
+    spotObjects[i] = spot;
+  }
+  return spotObjects;
 }
 
 function getRandomCoordinate(min: number, max: number): number {
